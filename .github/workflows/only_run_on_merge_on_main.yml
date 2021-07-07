@@ -24,7 +24,7 @@ jobs:
     - name: Only run on push on branch main (or PR with label 'deploy...')
       if: |
         contains(toJson(github.event.pull_request.labels.*.name), 'deploy' ) ||
-        github.head_ref == 'main'
+        ( github.ref == 'main' && github.base_ref == '' && github.head_ref == '' )
       run: echo "IT WORKS?"
 
 
