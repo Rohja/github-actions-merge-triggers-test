@@ -1,0 +1,31 @@
+on:
+  push:
+    branches:
+      - "main"
+
+name: Action running on push on dev
+
+jobs:
+  build_job:
+    name: Test triggers
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      if: contains(toJson(github.event.pull_request.labels.*.name), 'deploy' )
+
+    - name: Print Refs
+      run: |
+        echo "HEAD REF:" ${{ github.head_ref }}
+        echo "BASE REF:" ${{ github.base_ref }}
+        echo "REF:     " ${{ github.ref }}
+
+    - name: Only run on push on branch main (or PR with label 'deploy...')
+      uses: aws-actions/configure-aws-credentials@v1
+      if: |
+        contains(toJson(github.event.pull_request.labels.*.name), 'deploy' ) ||
+        github.head_ref == 'main'
+      run: echo "IT WORKS?"
+
+
