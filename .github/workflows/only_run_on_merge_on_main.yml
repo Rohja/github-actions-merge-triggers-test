@@ -22,7 +22,6 @@ jobs:
         echo "REF:     " ${{ github.ref }}
 
     - name: Only run on push on branch main (or PR with label 'deploy...')
-      uses: aws-actions/configure-aws-credentials@v1
       if: |
         contains(toJson(github.event.pull_request.labels.*.name), 'deploy' ) ||
         github.head_ref == 'main'
